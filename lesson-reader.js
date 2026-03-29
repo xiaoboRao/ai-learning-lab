@@ -106,22 +106,6 @@ function renderArticle(lesson) {
   renderFallbackArticle(articleContainer, lesson);
 }
 
-function renderActions(lesson) {
-  const actionList = document.querySelector("#reader-action-list");
-  actionList.innerHTML = "";
-
-  lesson.actions.forEach((action, index) => {
-    const article = document.createElement("article");
-    article.className = "practice-card";
-    article.innerHTML = `
-      <p class="section-kicker">Practice ${index + 1}</p>
-      <h3>练习 ${index + 1}</h3>
-      <p>${action}</p>
-    `;
-    actionList.appendChild(article);
-  });
-}
-
 function setupNavigation(lesson, lessonsData) {
   const prevLesson = lessonsData.find((item) => item.id === lesson.id - 1);
   const nextLesson = lessonsData.find((item) => item.id === lesson.id + 1);
@@ -160,7 +144,6 @@ loadGeneratedLessons().then((generatedLessons) => {
   renderList("#reader-goals-list", lesson.goals);
   renderList("#reader-points-list", lesson.points);
   renderArticle(lesson);
-  renderActions(lesson);
   setupNavigation(lesson, lessonsData);
 
   const overviewLink = document.querySelector("#reader-overview-link");
