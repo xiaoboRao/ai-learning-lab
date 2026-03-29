@@ -87,8 +87,9 @@ function renderLessons(lessons) {
   lessonList.innerHTML = "";
 
   lessons.forEach((lesson) => {
-    const article = document.createElement("article");
+    const article = document.createElement("a");
     article.className = "catalog-item";
+    article.href = `./lesson-reader.html?id=${lesson.id}`;
     article.innerHTML = `
       <div class="catalog-main">
         <span class="catalog-index">${String(lesson.id).padStart(2, "0")}</span>
@@ -100,7 +101,7 @@ function renderLessons(lessons) {
           </div>
         </div>
       </div>
-      <a class="catalog-action" href="./lesson.html?id=${lesson.id}">进入学习</a>
+      <span class="catalog-action">进入正文</span>
     `;
     lessonList.appendChild(article);
   });

@@ -16,10 +16,12 @@ const siteFiles = [
   "index.html",
   "project-rag-api.html",
   "lesson.html",
+  "lesson-reader.html",
   "styles.css",
   "course-data.js",
   "project.js",
   "lesson.js",
+  "lesson-reader.js",
 ];
 
 async function ensureDir(dir) {

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>课程正文 | AI Learning Lab</title>
+    <meta
+      name="description"
+      content="AI Learning Lab 正文页。专注阅读单节课程内容。"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="site-page lesson-reader-page">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="./index.html">
+          <span class="brand-mark">AI</span>
+          <span class="brand-text">
+            <strong>AI Learning Lab</strong>
+            <small>Project-based AI tutorials</small>
+          </span>
+        </a>
+        <nav class="topnav" aria-label="Primary">
+          <a href="./index.html">首页</a>
+          <a href="./project-rag-api.html" class="is-active">课程</a>
+          <a href="https://github.com/xiaoboRao/rag_api" target="_blank" rel="noreferrer">源码</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="site-shell reader-shell">
+      <div class="reader-back-row">
+        <a class="back-link" href="./project-rag-api.html">返回课程列表</a>
+        <a class="back-link" href="./lesson.html?id=1" id="back-to-overview">返回课程概览</a>
+      </div>
+
+      <section class="reader-header">
+        <div class="reader-header-copy">
+          <p class="section-kicker" id="reader-kicker">课程正文</p>
+          <h1 id="reader-title">加载中</h1>
+          <p class="lesson-description" id="reader-description">正在准备正文内容。</p>
+
+          <div class="lesson-meta-strip">
+            <span class="badge badge-accent" id="reader-unit">单元一</span>
+            <span class="badge badge-soft" id="reader-number">第 01 课</span>
+          </div>
+
+          <div class="reader-actions">
+            <a class="button ghost" href="./lesson.html?id=1" id="reader-overview-link">查看课程概览</a>
+            <a class="button primary" href="./project-rag-api.html" id="reader-source-link">打开源码入口</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="portal-section summary-section">
+        <div class="summary-columns">
+          <article class="info-panel">
+            <div class="section-heading compact">
+              <div>
+                <p class="section-kicker">Goals</p>
+                <h2>学习目标</h2>
+              </div>
+            </div>
+            <ul id="reader-goals-list" class="detail-list"></ul>
+          </article>
+
+          <article class="info-panel">
+            <div class="section-heading compact">
+              <div>
+                <p class="section-kicker">Key Points</p>
+                <h2>核心知识点</h2>
+              </div>
+            </div>
+            <ul id="reader-points-list" class="detail-list"></ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="portal-section">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Source Entry</p>
+            <h2>源码入口</h2>
+          </div>
+        </div>
+        <div id="reader-reading-list" class="card-grid source-grid"></div>
+      </section>
+
+      <section class="portal-section reader-article-panel">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Content</p>
+            <h2>课程正文</h2>
+          </div>
+        </div>
+        <div id="reader-article" class="lesson-article"></div>
+      </section>
+
+      <section class="portal-section">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Practice</p>
+            <h2>练习与下一步</h2>
+          </div>
+        </div>
+        <div id="reader-action-list" class="card-grid practice-grid"></div>
+        <div class="pager-row">
+          <a id="reader-prev-lesson" class="button ghost" href="./project-rag-api.html">上一课</a>
+          <a id="reader-next-lesson" class="button primary" href="./project-rag-api.html">下一课</a>
+        </div>
+      </section>
+    </main>
+
+    <script src="./course-data.js"></script>
+    <script src="./lesson-reader.js"></script>
+  </body>
+</html>

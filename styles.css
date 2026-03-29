@@ -619,6 +619,17 @@ img {
   padding-bottom: 28px;
 }
 
+.reader-shell {
+  max-width: 980px;
+  padding-bottom: 28px;
+}
+
+.reader-back-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .lesson-hero {
   padding: 24px;
   border-radius: 28px;
@@ -628,6 +639,32 @@ img {
   position: relative;
   overflow: hidden;
   margin-bottom: 24px;
+}
+
+.reader-header {
+  padding: 28px;
+  border-radius: 28px;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(circle at top right, rgba(90, 140, 255, 0.14), transparent 24%),
+    var(--panel);
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+
+.reader-header-copy {
+  max-width: 780px;
+}
+
+.reader-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.reader-article-panel {
+  padding-bottom: 32px;
 }
 
 .lesson-poster {
@@ -763,6 +800,7 @@ img {
   .project-hero,
   .featured-project,
   .lesson-hero,
+  .reader-header,
   .summary-columns {
     grid-template-columns: 1fr;
   }
@@ -796,7 +834,8 @@ img {
 
   .hero-panel,
   .portal-section,
-  .lesson-hero {
+  .lesson-hero,
+  .reader-header {
     padding: 20px;
     border-radius: 22px;
   }

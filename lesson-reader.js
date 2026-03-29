@@ -1,7 +1,7 @@
 const params = new URLSearchParams(window.location.search);
 const lessonId = Number(params.get("id") || "1");
 const staticLessons = window.courseData.lessons;
-const catalogList = document.querySelector("#lesson-catalog-list");
+const projectTitle = window.courseData.project.title;
 const RAG_API_REPO = "https://github.com/xiaoboRao/rag_api";
 
 async function loadGeneratedLessons() {
@@ -27,6 +27,35 @@ function toPublicSourceHref(path) {
 function setText(selector, value) {
   const element = document.querySelector(selector);
   if (element) element.textContent = value;
+}
+
+function renderFallbackArticle(container, lesson) {
+  lesson.article.forEach((block) => {
+    if (block.type === "paragraph") {
+      const p = document.createElement("p");
+      p.textContent = block.text;
+      container.appendChild(p);
+    }
+
+    if (block.type === "list") {
+      const ul = document.createElement("ul");
+      block.items.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        ul.appendChild(li);
+      });
+      container.appendChild(ul);
+    }
+
+    if (block.type === "image") {
+      const figure = document.createElement("figure");
+      figure.innerHTML = `
+        <img src="${block.src}" alt="${block.alt}" />
+        <figcaption>${block.caption}</figcaption>
+      `;
+      container.appendChild(figure);
+    }
+  });
 }
 
 function mergeLessons(staticItems, generatedItems) {
@@ -76,7 +105,7 @@ function renderList(selector, items) {
 }
 
 function renderSources(lesson) {
-  const readingList = document.querySelector("#lesson-reading-list");
+  const readingList = document.querySelector("#reader-reading-list");
   readingList.innerHTML = "";
 
   const readingPaths = lesson.generatedSourcePath
@@ -100,7 +129,7 @@ function renderSources(lesson) {
     readingList.appendChild(article);
   });
 
-  const sourceLink = document.querySelector("#view-source-link");
+  const sourceLink = document.querySelector("#reader-source-link");
   const firstSource = readingPaths[0];
   if (firstSource) {
     sourceLink.href = toPublicSourceHref(firstSource);
@@ -110,71 +139,78 @@ function renderSources(lesson) {
   }
 }
 
-function renderCatalog(lessonsData, currentLessonId) {
-  catalogList.innerHTML = "";
-  setText("#catalog-title", `课程目录（共 ${lessonsData.length} 讲）`);
+function renderArticle(lesson) {
+  const articleContainer = document.querySelector("#reader-article");
+  articleContainer.innerHTML = "";
 
-  lessonsData.forEach((item) => {
-    const article = document.createElement("a");
-    article.className = `catalog-item${item.id === currentLessonId ? " is-current" : ""}`;
-    article.href = `./lesson-reader.html?id=${item.id}`;
+  if (lesson.generatedContentHtml) {
+    articleContainer.innerHTML = lesson.generatedContentHtml;
+    return;
+  }
+
+  renderFallbackArticle(articleContainer, lesson);
+}
+
+function renderActions(lesson) {
+  const actionList = document.querySelector("#reader-action-list");
+  actionList.innerHTML = "";
+
+  lesson.actions.forEach((action, index) => {
+    const article = document.createElement("article");
+    article.className = "practice-card";
     article.innerHTML = `
-      <div class="catalog-main">
-        <span class="catalog-index">${String(item.id).padStart(2, "0")}</span>
-        <div class="catalog-copy">
-          <h3 class="catalog-title">${item.title}</h3>
-          <p>${item.description}</p>
-          <div class="catalog-meta">
-            <span class="badge badge-soft">${item.unit}</span>
-            ${item.id === currentLessonId ? '<span class="badge badge-accent">当前课程</span>' : ""}
-          </div>
-        </div>
-      </div>
-      <span class="catalog-action">${item.id === currentLessonId ? "进入正文" : "打开正文"}</span>
+      <p class="section-kicker">Practice ${index + 1}</p>
+      <h3>练习 ${index + 1}</h3>
+      <p>${action}</p>
     `;
-    catalogList.appendChild(article);
+    actionList.appendChild(article);
   });
 }
 
-function setupPoster(lesson) {
-  const poster = document.querySelector("#lesson-poster-art");
-  if (!poster) return;
+function setupNavigation(lesson, lessonsData) {
+  const prevLesson = lessonsData.find((item) => item.id === lesson.id - 1);
+  const nextLesson = lessonsData.find((item) => item.id === lesson.id + 1);
+  const prevLink = document.querySelector("#reader-prev-lesson");
+  const nextLink = document.querySelector("#reader-next-lesson");
 
-  let posterImage = "";
-
-  if (lesson.generatedContentHtml) {
-    const documentFragment = new DOMParser().parseFromString(lesson.generatedContentHtml, "text/html");
-    posterImage = documentFragment.querySelector("img")?.getAttribute("src") || "";
+  if (prevLesson) {
+    prevLink.href = `./lesson-reader.html?id=${prevLesson.id}`;
+    prevLink.textContent = `上一课 · ${prevLesson.title}`;
+  } else {
+    prevLink.href = "./project-rag-api.html";
+    prevLink.textContent = "返回课程列表";
   }
 
-  if (!posterImage) {
-    posterImage = lesson.article.find((block) => block.type === "image")?.src || "";
+  if (nextLesson) {
+    nextLink.href = `./lesson-reader.html?id=${nextLesson.id}`;
+    nextLink.textContent = `下一课 · ${nextLesson.title}`;
+  } else {
+    nextLink.href = "./project-rag-api.html";
+    nextLink.textContent = "返回课程列表";
   }
-
-  if (!posterImage) return;
-
-  poster.style.background = `
-    linear-gradient(180deg, rgba(8, 11, 18, 0.18), rgba(8, 11, 18, 0.72)),
-    url("${posterImage}") center/cover no-repeat
-  `;
 }
 
 loadGeneratedLessons().then((generatedLessons) => {
   const lessonsData = mergeLessons(staticLessons, generatedLessons);
   const lesson = lessonsData.find((item) => item.id === lessonId) || lessonsData[0];
-  const startReadingLink = document.querySelector("#start-reading");
 
-  setText("#lesson-kicker", `${lesson.unit} · 第 ${String(lesson.id).padStart(2, "0")} 课`);
-  setText("#lesson-title", lesson.title);
-  setText("#lesson-description", lesson.description);
-  setText("#lesson-unit", lesson.unit);
-  setText("#lesson-number", `第 ${String(lesson.id).padStart(2, "0")} 课`);
+  document.title = `${lesson.title} | ${projectTitle} | AI Learning Lab`;
 
-  renderList("#lesson-goals-list", lesson.goals);
-  renderList("#lesson-points-list", lesson.points);
-  renderCatalog(lessonsData, lesson.id);
+  setText("#reader-kicker", `${lesson.unit} · 第 ${String(lesson.id).padStart(2, "0")} 课`);
+  setText("#reader-title", lesson.title);
+  setText("#reader-description", lesson.description);
+  setText("#reader-unit", lesson.unit);
+  setText("#reader-number", `第 ${String(lesson.id).padStart(2, "0")} 课`);
+
+  renderList("#reader-goals-list", lesson.goals);
+  renderList("#reader-points-list", lesson.points);
   renderSources(lesson);
-  setupPoster(lesson);
+  renderArticle(lesson);
+  renderActions(lesson);
+  setupNavigation(lesson, lessonsData);
 
-  startReadingLink.href = `./lesson-reader.html?id=${lesson.id}`;
+  const overviewLink = document.querySelector("#reader-overview-link");
+  const backToOverview = document.querySelector("#back-to-overview");
+  overviewLink.href = `./lesson.html?id=${lesson.id}`;
+  backToOverview.href = `./lesson.html?id=${lesson.id}`;
 });
