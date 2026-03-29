@@ -6,93 +6,122 @@
     <title>课程详情 | AI Learning Lab</title>
     <meta
       name="description"
-      content="AI Learning Lab 课程详情页。按课次学习 rag_api 教学内容。"
+      content="AI Learning Lab 课程详情页。先看本课概览，再浏览课程目录与正文内容。"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body class="lesson-page">
-    <div class="shell shell-wide">
-      <aside class="sidebar">
-        <a class="sidebar-back" href="./project-rag-api.html">← 返回课程列表</a>
-        <div class="sidebar-card">
-          <p class="eyebrow">Lesson</p>
-          <h1 id="lesson-side-title">加载中</h1>
-          <p id="lesson-side-summary">正在准备课程内容。</p>
-        </div>
-        <nav class="sidebar-card sidebar-nav" aria-label="Lesson Navigation">
-          <a href="#lesson-top" class="nav-link is-active">课程概览</a>
-          <a href="#lesson-goals" class="nav-link">学习目标</a>
-          <a href="#lesson-points" class="nav-link">核心知识点</a>
-          <a href="#lesson-readings" class="nav-link">源码阅读</a>
-          <a href="#lesson-content" class="nav-link">正文内容</a>
-          <a href="#lesson-actions" class="nav-link">练习与下一步</a>
+  <body class="site-page lesson-page">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="./index.html">
+          <span class="brand-mark">AI</span>
+          <span class="brand-text">
+            <strong>AI Learning Lab</strong>
+            <small>Project-based AI tutorials</small>
+          </span>
+        </a>
+        <nav class="topnav" aria-label="Primary">
+          <a href="./index.html">首页</a>
+          <a href="./project-rag-api.html" class="is-active">课程</a>
+          <a href="https://github.com/xiaoboRao/rag_api" target="_blank" rel="noreferrer">源码</a>
         </nav>
-      </aside>
+      </div>
+    </header>
 
-      <main class="content">
-        <section id="lesson-top" class="panel intro-panel">
+    <main class="site-shell lesson-shell">
+      <a class="back-link" href="./project-rag-api.html">返回课程列表</a>
+
+      <section class="lesson-hero">
+        <div class="lesson-poster" id="lesson-poster">
+          <div class="lesson-poster-art" id="lesson-poster-art" aria-hidden="true"></div>
+        </div>
+
+        <div class="lesson-summary">
+          <p class="section-kicker" id="lesson-kicker">课程详情</p>
+          <h1 id="lesson-title">加载中</h1>
+          <p class="lesson-description" id="lesson-description">正在准备课程简介。</p>
+
+          <div class="lesson-meta-strip">
+            <span class="badge badge-accent" id="lesson-unit">单元一</span>
+            <span class="badge badge-soft" id="lesson-number">第 01 课</span>
+          </div>
+
+          <div class="lesson-action-row">
+            <a class="button primary" href="#lesson-article-section" id="start-reading">开始阅读</a>
+            <a class="button ghost" href="./project-rag-api.html" id="view-source-link">打开源码入口</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="portal-section summary-section">
+        <div class="summary-columns">
+          <article class="info-panel">
+            <div class="section-heading compact">
+              <div>
+                <p class="section-kicker">Goals</p>
+                <h2>学习目标</h2>
+              </div>
+            </div>
+            <ul id="lesson-goals-list" class="detail-list"></ul>
+          </article>
+
+          <article class="info-panel">
+            <div class="section-heading compact">
+              <div>
+                <p class="section-kicker">Key Points</p>
+                <h2>核心知识点</h2>
+              </div>
+            </div>
+            <ul id="lesson-points-list" class="detail-list"></ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="portal-section">
+        <div class="section-heading">
           <div>
-            <p class="eyebrow" id="lesson-kicker">Lesson Detail</p>
-            <h2 id="lesson-title">加载中</h2>
-            <p class="lead" id="lesson-description">正在准备课程简介。</p>
+            <p class="section-kicker">Lesson Catalog</p>
+            <h2 id="catalog-title">课程目录</h2>
           </div>
-          <div class="stats two-stats">
-            <div class="stat-card">
-              <span class="stat-value" id="lesson-number">01</span>
-              <span class="stat-label">章节编号</span>
-            </div>
-            <div class="stat-card">
-              <span class="stat-value" id="lesson-unit">单元一</span>
-              <span class="stat-label">所属单元</span>
-            </div>
-          </div>
-        </section>
+          <p class="section-note">继续往下可以切换到其他章节，当前课程会高亮显示。</p>
+        </div>
+        <div id="lesson-catalog-list" class="catalog-list lesson-catalog"></div>
+      </section>
 
-        <section id="lesson-goals" class="panel">
-          <div class="section-head">
-            <p class="eyebrow">Goals</p>
-            <h3>学习目标</h3>
+      <section class="portal-section">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Source Entry</p>
+            <h2>源码入口</h2>
           </div>
-          <ul id="lesson-goals-list" class="bullet-list"></ul>
-        </section>
+        </div>
+        <div id="lesson-reading-list" class="card-grid source-grid"></div>
+      </section>
 
-        <section id="lesson-points" class="panel">
-          <div class="section-head">
-            <p class="eyebrow">Key Points</p>
-            <h3>核心知识点</h3>
+      <section class="portal-section" id="lesson-article-section">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Content</p>
+            <h2>课程正文</h2>
           </div>
-          <ul id="lesson-points-list" class="bullet-list"></ul>
-        </section>
+        </div>
+        <div id="lesson-article" class="lesson-article"></div>
+      </section>
 
-        <section id="lesson-readings" class="panel">
-          <div class="section-head">
-            <p class="eyebrow">Reading</p>
-            <h3>源码阅读入口</h3>
+      <section class="portal-section">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Practice</p>
+            <h2>练习与下一步</h2>
           </div>
-          <div id="lesson-reading-list" class="source-list"></div>
-        </section>
-
-        <section id="lesson-content" class="panel">
-          <div class="section-head">
-            <p class="eyebrow">Content</p>
-            <h3>课程正文</h3>
-          </div>
-          <div id="lesson-article" class="lesson-article"></div>
-        </section>
-
-        <section id="lesson-actions" class="panel">
-          <div class="section-head">
-            <p class="eyebrow">Next Step</p>
-            <h3>练习与导航</h3>
-          </div>
-          <div id="lesson-action-list" class="practice-list"></div>
-          <div class="lesson-pager">
-            <a id="prev-lesson" class="button secondary" href="./project-rag-api.html">上一课</a>
-            <a id="next-lesson" class="button primary" href="./project-rag-api.html">下一课</a>
-          </div>
-        </section>
-      </main>
-    </div>
+        </div>
+        <div id="lesson-action-list" class="card-grid practice-grid"></div>
+        <div class="pager-row">
+          <a id="prev-lesson" class="button ghost" href="./project-rag-api.html">上一课</a>
+          <a id="next-lesson" class="button primary" href="./project-rag-api.html">下一课</a>
+        </div>
+      </section>
+    </main>
 
     <script src="./course-data.js"></script>
     <script src="./lesson.js"></script>

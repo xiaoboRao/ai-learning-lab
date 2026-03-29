@@ -6,80 +6,106 @@
     <title>rag_api | AI Learning Lab</title>
     <meta
       name="description"
-      content="rag_api 教学项目页。查看课程结构、15 节课列表与源码入口。"
+      content="rag_api 教学项目页。查看课程结构、课程列表与源码阅读入口。"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body class="project-page">
-    <div class="shell shell-wide">
-      <aside class="sidebar">
-        <a class="sidebar-back" href="./index.html">← 返回项目首页</a>
-        <div class="sidebar-card">
-          <p class="eyebrow">Current Project</p>
-          <h1>rag_api</h1>
-          <p>
-            一个偏索引与检索层的教学项目。目标不是做聊天界面，而是学会 RAG 底座如何被构建出来。
-          </p>
-        </div>
-        <nav class="sidebar-card sidebar-nav" aria-label="Project Navigation">
-          <a href="#overview" class="nav-link is-active">项目概览</a>
-          <a href="#units" class="nav-link">学习单元</a>
-          <a href="#lessons" class="nav-link">课程列表</a>
-          <a href="#sources" class="nav-link">源码入口</a>
+  <body class="site-page project-page">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="./index.html">
+          <span class="brand-mark">AI</span>
+          <span class="brand-text">
+            <strong>AI Learning Lab</strong>
+            <small>Project-based AI tutorials</small>
+          </span>
+        </a>
+        <nav class="topnav" aria-label="Primary">
+          <a href="./index.html">首页</a>
+          <a href="./project-rag-api.html" class="is-active">课程</a>
+          <a href="https://github.com/xiaoboRao/rag_api" target="_blank" rel="noreferrer">源码</a>
         </nav>
-      </aside>
+      </div>
+    </header>
 
-      <main class="content">
-        <section id="overview" class="panel intro-panel">
+    <main class="site-shell">
+      <a class="back-link" href="./index.html">返回项目首页</a>
+
+      <section class="hero-panel project-hero">
+        <div class="hero-copy">
+          <p class="hero-kicker">Current Project</p>
+          <h1>rag_api</h1>
+          <p class="hero-lead">
+            这是一个偏索引与检索层的 RAG 学习项目。先理解系统边界，再逐节拆开摄取、切块、Embedding、向量库、检索接口和工程化细节。
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="./lesson.html?id=1">从第 1 课开始</a>
+            <a
+              class="button ghost"
+              href="https://github.com/xiaoboRao/rag_api"
+              target="_blank"
+              rel="noreferrer"
+            >
+              打开 GitHub 仓库
+            </a>
+          </div>
+        </div>
+        <div class="project-stats">
+          <article class="stat-card">
+            <strong>5</strong>
+            <span>学习单元</span>
+          </article>
+          <article class="stat-card">
+            <strong>15</strong>
+            <span>课程章节</span>
+          </article>
+          <article class="stat-card">
+            <strong>1</strong>
+            <span>源码仓库</span>
+          </article>
+        </div>
+      </section>
+
+      <div class="chip-row" aria-label="Learning Units">
+        <span class="chip is-selected">全部课程</span>
+        <span class="chip">单元一</span>
+        <span class="chip">单元二</span>
+        <span class="chip">单元三</span>
+        <span class="chip">单元四</span>
+        <span class="chip">单元五</span>
+      </div>
+
+      <section class="portal-section">
+        <div class="section-heading">
           <div>
-            <p class="eyebrow">Project Overview</p>
-            <h2>先看课程结构，再逐节进入。</h2>
-            <p class="lead">
-              这个页面只负责展示项目说明、课程结构和章节入口。真正的学习发生在每一节课的详情页里。
-            </p>
+            <p class="section-kicker">Units</p>
+            <h2>学习单元</h2>
           </div>
-          <div class="stats">
-            <div class="stat-card">
-              <span class="stat-value">5</span>
-              <span class="stat-label">学习单元</span>
-            </div>
-            <div class="stat-card">
-              <span class="stat-value">15</span>
-              <span class="stat-label">课程章节</span>
-            </div>
-            <div class="stat-card">
-              <span class="stat-value">1</span>
-              <span class="stat-label">主仓库</span>
-            </div>
-          </div>
-        </section>
+        </div>
+        <div id="units-grid" class="card-grid units-grid"></div>
+      </section>
 
-        <section id="units" class="panel">
-          <div class="section-head">
-            <p class="eyebrow">Units</p>
-            <h3>学习单元</h3>
+      <section class="portal-section">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Lesson Catalog</p>
+            <h2>课程列表</h2>
           </div>
-          <div id="units-grid" class="units-grid"></div>
-        </section>
+          <p class="section-note">建议按顺序进入，每节课都有独立页面和源码入口。</p>
+        </div>
+        <div id="lesson-list" class="catalog-list"></div>
+      </section>
 
-        <section id="lessons" class="panel">
-          <div class="section-head">
-            <p class="eyebrow">Lessons</p>
-            <h3>课程列表</h3>
-            <p>按顺序进入最合适。每节课都是独立页面，可以单独学习。</p>
+      <section class="portal-section">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Source Map</p>
+            <h2>源码入口</h2>
           </div>
-          <div id="lesson-list" class="lesson-list"></div>
-        </section>
-
-        <section id="sources" class="panel">
-          <div class="section-head">
-            <p class="eyebrow">Source Map</p>
-            <h3>源码入口</h3>
-          </div>
-          <div id="source-list" class="source-list"></div>
-        </section>
-      </main>
-    </div>
+        </div>
+        <div id="source-list" class="card-grid source-grid"></div>
+      </section>
+    </main>
 
     <script src="./course-data.js"></script>
     <script src="./project.js"></script>

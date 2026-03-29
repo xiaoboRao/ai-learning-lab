@@ -1,8 +1,8 @@
 const { units, lessons: staticLessons, sources } = window.courseData;
-
 const unitsGrid = document.querySelector("#units-grid");
 const lessonList = document.querySelector("#lesson-list");
 const sourceList = document.querySelector("#source-list");
+const RAG_API_REPO = "https://github.com/xiaoboRao/rag_api";
 
 async function loadGeneratedLessons() {
   try {
@@ -13,6 +13,15 @@ async function loadGeneratedLessons() {
   } catch {
     return [];
   }
+}
+
+function toPublicSourceHref(path) {
+  if (!path) return "./project-rag-api.html";
+  if (/^https?:\/\//.test(path)) return path;
+  if (!path.startsWith("../rag_api/")) return path;
+  const relativePath = path.replace("../rag_api/", "");
+  const target = /\.[a-z0-9]+$/i.test(relativePath) ? "blob" : "tree";
+  return `${RAG_API_REPO}/${target}/main/${relativePath}`;
 }
 
 function mergeLessons(staticItems, generatedItems) {
@@ -51,22 +60,21 @@ function renderUnits(lessons) {
 
   units.forEach((unit) => {
     const article = document.createElement("article");
-    article.className = "unit-card";
+    article.className = "portal-card unit-card";
     article.innerHTML = `
       <div class="unit-top">
-        <span class="unit-index">0${unit.id}</span>
+        <span class="unit-index">${String(unit.id).padStart(2, "0")}</span>
         <div>
-          <p class="eyebrow">Unit ${unit.id}</p>
-          <h4>${unit.title}</h4>
+          <p class="section-kicker">Unit ${unit.id}</p>
+          <h3>${unit.title}</h3>
         </div>
       </div>
       <p>${unit.summary}</p>
-      <div class="pill-row">
+      <div class="tag-row">
         ${unit.lessons
           .map((lessonId) => {
             const lesson = lessons.find((item) => item.id === lessonId);
-            if (!lesson) return "";
-            return `<span class="pill">第 ${lesson.id} 课</span>`;
+            return lesson ? `<span class="tag">第 ${lesson.id} 课</span>` : "";
           })
           .join("")}
       </div>
@@ -80,19 +88,42 @@ function renderLessons(lessons) {
 
   lessons.forEach((lesson) => {
     const article = document.createElement("article");
-    article.className = "lesson-row";
+    article.className = "catalog-item";
     article.innerHTML = `
-      <div class="lesson-row-main">
-        <span class="lesson-index">${String(lesson.id).padStart(2, "0")}</span>
-        <div>
-          <p class="eyebrow">${lesson.unit}</p>
-          <h4>${lesson.title}</h4>
+      <div class="catalog-main">
+        <span class="catalog-index">${String(lesson.id).padStart(2, "0")}</span>
+        <div class="catalog-copy">
+          <h3 class="catalog-title">${lesson.title}</h3>
           <p>${lesson.description}</p>
+          <div class="catalog-meta">
+            <span class="badge badge-soft">${lesson.unit}</span>
+          </div>
         </div>
       </div>
-      <a class="button secondary compact" href="./lesson.html?id=${lesson.id}">进入学习</a>
+      <a class="catalog-action" href="./lesson.html?id=${lesson.id}">进入学习</a>
     `;
     lessonList.appendChild(article);
+  });
+}
+
+function renderSources() {
+  sourceList.innerHTML = "";
+
+  sources.forEach((source) => {
+    const article = document.createElement("article");
+    article.className = "source-card";
+    article.innerHTML = `
+      <div class="source-card-header">
+        <div>
+          <p class="section-kicker">Source</p>
+          <h3>${source.title}</h3>
+        </div>
+        <span class="badge badge-soft">源码</span>
+      </div>
+      <p>${source.description}</p>
+      <a class="text-link" href="${toPublicSourceHref(source.href)}" target="_blank" rel="noreferrer">打开源码</a>
+    `;
+    sourceList.appendChild(article);
   });
 }
 
@@ -100,35 +131,5 @@ loadGeneratedLessons().then((generatedLessons) => {
   const lessons = mergeLessons(staticLessons, generatedLessons);
   renderUnits(lessons);
   renderLessons(lessons);
+  renderSources();
 });
-
-sources.forEach((source) => {
-  const article = document.createElement("article");
-  article.className = "source-card";
-  article.innerHTML = `
-    <div>
-      <h4>${source.title}</h4>
-      <p>${source.description}</p>
-    </div>
-    <a class="text-link" href="${source.href}">打开</a>
-  `;
-  sourceList.appendChild(article);
-});
-
-const navLinks = [...document.querySelectorAll(".nav-link")];
-const sections = navLinks.map((link) => document.querySelector(link.getAttribute("href"))).filter(Boolean);
-
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      const targetId = `#${entry.target.id}`;
-      navLinks.forEach((link) => {
-        link.classList.toggle("is-active", link.getAttribute("href") === targetId);
-      });
-    });
-  },
-  { rootMargin: "-25% 0px -60% 0px", threshold: 0.05 }
-);
-
-sections.forEach((section) => observer.observe(section));

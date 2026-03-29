@@ -6,36 +6,101 @@
     <title>AI Learning Lab</title>
     <meta
       name="description"
-      content="AI Learning Lab 首页。先选择一个教学项目，再进入对应课程列表与章节学习。"
+      content="AI Learning Lab 首页。按项目进入课程，再逐节展开学习。"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body class="home-page">
-    <main class="shell shell-narrow">
-      <header class="page-hero">
-        <p class="eyebrow">Teaching Projects</p>
-        <h1>选择一个教学项目开始学习</h1>
-        <p class="lead">
-          首页只展示项目。进入项目后，再查看课程列表，最后逐节进入具体内容。
-        </p>
-      </header>
-
-      <section class="project-list" aria-label="Project List">
-        <a class="project-card" href="./project-rag-api.html">
-          <div class="project-card-top">
-            <span class="project-badge">Project 01</span>
-            <span class="project-arrow">进入</span>
-          </div>
-          <h2>rag_api</h2>
-          <p>
-            一个以 <code>file_id</code> 为中心组织文档向量的 RAG 检索服务。课程会围绕文档摄取、切块、Embedding、向量库、检索接口和工程化实现展开。
-          </p>
-          <ul class="project-meta">
-            <li>5 个学习单元</li>
-            <li>15 节课</li>
-            <li>适合工程化 RAG 学习</li>
-          </ul>
+  <body class="site-page home-page">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="./index.html">
+          <span class="brand-mark">AI</span>
+          <span class="brand-text">
+            <strong>AI Learning Lab</strong>
+            <small>Project-based AI tutorials</small>
+          </span>
         </a>
+        <nav class="topnav" aria-label="Primary">
+          <a href="./index.html" class="is-active">首页</a>
+          <a href="./project-rag-api.html">课程</a>
+          <a href="https://github.com/xiaoboRao/ai-learning-lab" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="site-shell">
+      <section class="hero-panel">
+        <div class="hero-copy">
+          <p class="hero-kicker">AI Curriculum Archive</p>
+          <h1>把 AI 学习路径拆成一个个可以点击进入的项目。</h1>
+          <p class="hero-lead">
+            首页只展示项目入口。进入项目后查看课程列表，再逐节进入具体内容与源码阅读。
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="./project-rag-api.html">进入当前项目</a>
+            <a
+              class="button ghost"
+              href="https://github.com/xiaoboRao/rag_api"
+              target="_blank"
+              rel="noreferrer"
+            >
+              查看课程源仓库
+            </a>
+          </div>
+        </div>
+        <div class="hero-preview" aria-hidden="true">
+          <div class="preview-grid">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </section>
+
+      <div class="chip-row" aria-label="Project Categories">
+        <span class="chip is-selected">全部项目</span>
+        <span class="chip">RAG</span>
+        <span class="chip">LLM Engineering</span>
+        <span class="chip">Agent</span>
+        <span class="chip">Prompting</span>
+      </div>
+
+      <section class="portal-section">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Project List</p>
+            <h2>当前可学习项目</h2>
+          </div>
+        </div>
+
+        <div class="card-grid home-project-grid">
+          <a class="portal-card featured-project" href="./project-rag-api.html">
+            <div class="card-cover rag-cover">
+              <div class="cover-orbit"></div>
+              <div class="cover-orbit orbit-b"></div>
+              <div class="cover-glow"></div>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span class="badge badge-accent">进行中</span>
+                <span class="meta-text">5 个单元 · 15 节课</span>
+              </div>
+              <h3>rag_api</h3>
+              <p>
+                以 <code>file_id</code> 为中心组织文档向量的 RAG 教学项目，重点覆盖文档摄取、切块、Embedding、向量库与检索接口。
+              </p>
+              <div class="tag-row">
+                <span class="tag">RAG</span>
+                <span class="tag">FastAPI</span>
+                <span class="tag">pgvector</span>
+              </div>
+              <span class="card-link">查看课程列表</span>
+            </div>
+          </a>
+        </div>
       </section>
     </main>
   </body>
