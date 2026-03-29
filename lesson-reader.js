@@ -48,6 +48,16 @@ function renderFallbackArticle(container, lesson) {
   });
 }
 
+function buildLessonHtml(lesson) {
+  if (lesson.generatedContentHtml) {
+    return lesson.generatedContentHtml;
+  }
+
+  const container = document.createElement("div");
+  renderFallbackArticle(container, lesson);
+  return container.innerHTML;
+}
+
 function mergeLessons(staticItems, generatedItems) {
   const generatedMap = new Map(generatedItems.map((item) => [item.id, item]));
   const merged = staticItems.map((item) => {
@@ -94,16 +104,142 @@ function renderList(selector, items) {
   });
 }
 
-function renderArticle(lesson) {
-  const articleContainer = document.querySelector("#reader-article");
-  articleContainer.innerHTML = "";
+function getRenderableNodes(root) {
+  return [...root.childNodes].filter((node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      return node.textContent.trim().length > 0;
+    }
+    return true;
+  });
+}
 
-  if (lesson.generatedContentHtml) {
-    articleContainer.innerHTML = lesson.generatedContentHtml;
-    return;
+function cloneNodesToHtml(nodes) {
+  const container = document.createElement("div");
+  nodes.forEach((node) => {
+    container.appendChild(node.cloneNode(true));
+  });
+  return container.innerHTML;
+}
+
+function extractSections(html) {
+  const documentFragment = new DOMParser().parseFromString(html, "text/html");
+  const root = documentFragment.body;
+  const splitTag = root.querySelector("h2") ? "H2" : root.querySelector("h3") ? "H3" : null;
+  const nodes = getRenderableNodes(root);
+
+  if (!splitTag || !nodes.length) {
+    return [
+      {
+        id: "reader-section-1",
+        title: "课程正文",
+        html,
+      },
+    ];
   }
 
-  renderFallbackArticle(articleContainer, lesson);
+  const sections = [];
+  let introNodes = [];
+  let currentSection = null;
+
+  nodes.forEach((node) => {
+    if (node.nodeType === Node.ELEMENT_NODE && node.tagName === splitTag) {
+      if (currentSection) {
+        sections.push(currentSection);
+      }
+
+      currentSection = {
+        id: `reader-section-${sections.length + 1}`,
+        title: node.textContent.trim(),
+        nodes: [...introNodes],
+      };
+      introNodes = [];
+      return;
+    }
+
+    if (currentSection) {
+      currentSection.nodes.push(node.cloneNode(true));
+    } else {
+      introNodes.push(node.cloneNode(true));
+    }
+  });
+
+  if (currentSection) {
+    sections.push(currentSection);
+  }
+
+  if (!sections.length && introNodes.length) {
+    return [
+      {
+        id: "reader-section-1",
+        title: "课程正文",
+        html: cloneNodesToHtml(introNodes),
+      },
+    ];
+  }
+
+  return sections.map((section) => ({
+    id: section.id,
+    title: section.title,
+    html: cloneNodesToHtml(section.nodes),
+  }));
+}
+
+function renderSectionArticle(section, sectionIndex, totalSections) {
+  const articleContainer = document.querySelector("#reader-article");
+  articleContainer.innerHTML = section.html;
+  setText("#reader-section-title", section.title);
+  setText("#reader-section-progress", `第 ${sectionIndex + 1} 节 / 共 ${totalSections} 节`);
+}
+
+function updateActiveSectionItem(activeSectionId) {
+  const items = [...document.querySelectorAll(".reader-section-item")];
+  items.forEach((item) => {
+    const isActive = item.dataset.sectionId === activeSectionId;
+    item.classList.toggle("is-active", isActive);
+    item.setAttribute("aria-current", isActive ? "true" : "false");
+  });
+}
+
+function renderSectionList(sections, activeSectionId) {
+  const sectionList = document.querySelector("#reader-section-list");
+  sectionList.innerHTML = "";
+
+  sections.forEach((section, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "reader-section-item";
+    button.dataset.sectionId = section.id;
+    button.setAttribute("aria-current", section.id === activeSectionId ? "true" : "false");
+    button.innerHTML = `
+      <span class="reader-section-index">${String(index + 1).padStart(2, "0")}</span>
+      <span class="reader-section-name">${section.title}</span>
+    `;
+    button.addEventListener("click", () => {
+      if (window.location.hash !== `#${section.id}`) {
+        window.location.hash = section.id;
+        return;
+      }
+      selectSection(section.id, sections, true);
+    });
+    sectionList.appendChild(button);
+  });
+
+  updateActiveSectionItem(activeSectionId);
+}
+
+function selectSection(sectionId, sections, shouldScroll = false) {
+  const selectedSection = sections.find((item) => item.id === sectionId) || sections[0];
+  const selectedIndex = sections.findIndex((item) => item.id === selectedSection.id);
+
+  renderSectionArticle(selectedSection, selectedIndex, sections.length);
+  updateActiveSectionItem(selectedSection.id);
+
+  if (shouldScroll) {
+    document.querySelector("#reader-content-panel")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
 }
 
 function setupNavigation(lesson, lessonsData) {
@@ -132,6 +268,10 @@ function setupNavigation(lesson, lessonsData) {
 loadGeneratedLessons().then((generatedLessons) => {
   const lessonsData = mergeLessons(staticLessons, generatedLessons);
   const lesson = lessonsData.find((item) => item.id === lessonId) || lessonsData[0];
+  const sections = extractSections(buildLessonHtml(lesson));
+  const initialSectionId = sections.some((item) => item.id === window.location.hash.slice(1))
+    ? window.location.hash.slice(1)
+    : sections[0].id;
 
   document.title = `${lesson.title} | ${projectTitle} | AI Learning Lab`;
 
@@ -143,11 +283,16 @@ loadGeneratedLessons().then((generatedLessons) => {
 
   renderList("#reader-goals-list", lesson.goals);
   renderList("#reader-points-list", lesson.points);
-  renderArticle(lesson);
+  renderSectionList(sections, initialSectionId);
+  selectSection(initialSectionId, sections);
   setupNavigation(lesson, lessonsData);
 
   const overviewLink = document.querySelector("#reader-overview-link");
   const backToOverview = document.querySelector("#back-to-overview");
   overviewLink.href = `./lesson.html?id=${lesson.id}`;
   backToOverview.href = `./lesson.html?id=${lesson.id}`;
+
+  window.addEventListener("hashchange", () => {
+    selectSection(window.location.hash.slice(1), sections, true);
+  });
 });

@@ -76,14 +76,27 @@
         </div>
       </section>
 
-      <section class="portal-section reader-article-panel">
-        <div class="section-heading">
-          <div>
-            <p class="section-kicker">Content</p>
-            <h2>课程正文</h2>
+      <section class="reader-content-layout">
+        <aside class="reader-outline-card">
+          <div class="section-heading compact">
+            <div>
+              <p class="section-kicker">Outline</p>
+              <h2>正文目录</h2>
+            </div>
           </div>
-        </div>
-        <div id="reader-article" class="lesson-article"></div>
+          <div id="reader-section-list" class="reader-section-list"></div>
+        </aside>
+
+        <section class="portal-section reader-article-panel" id="reader-content-panel">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Content</p>
+              <h2 id="reader-section-title">课程正文</h2>
+            </div>
+            <p class="section-note" id="reader-section-progress">第 1 节</p>
+          </div>
+          <div id="reader-article" class="lesson-article"></div>
+        </section>
       </section>
 
       <section class="portal-section">

@@ -656,6 +656,71 @@ img {
   max-width: 780px;
 }
 
+.reader-content-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  margin-bottom: 24px;
+}
+
+.reader-outline-card {
+  position: sticky;
+  top: 92px;
+  padding: 20px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.reader-section-list {
+  display: grid;
+  gap: 10px;
+}
+
+.reader-section-item {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+
+.reader-section-item:hover,
+.reader-section-item.is-active {
+  transform: translateY(-1px);
+  border-color: rgba(126, 176, 255, 0.3);
+  background: rgba(90, 140, 255, 0.1);
+}
+
+.reader-section-item.is-active {
+  box-shadow: inset 0 0 0 1px rgba(126, 176, 255, 0.16);
+}
+
+.reader-section-index {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: #dfe9ff;
+  background: linear-gradient(135deg, rgba(90, 140, 255, 0.26), rgba(90, 140, 255, 0.08));
+}
+
+.reader-section-name {
+  align-self: center;
+  line-height: 1.5;
+}
+
 .reader-actions {
   display: flex;
   flex-wrap: wrap;
@@ -801,6 +866,7 @@ img {
   .featured-project,
   .lesson-hero,
   .reader-header,
+  .reader-content-layout,
   .summary-columns {
     grid-template-columns: 1fr;
   }
