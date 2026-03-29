@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>课程详情 | AI Learning Lab</title>
+    <meta
+      name="description"
+      content="AI Learning Lab 课程详情页。按课次学习 rag_api 教学内容。"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="lesson-page">
+    <div class="shell shell-wide">
+      <aside class="sidebar">
+        <a class="sidebar-back" href="./project-rag-api.html">← 返回课程列表</a>
+        <div class="sidebar-card">
+          <p class="eyebrow">Lesson</p>
+          <h1 id="lesson-side-title">加载中</h1>
+          <p id="lesson-side-summary">正在准备课程内容。</p>
+        </div>
+        <nav class="sidebar-card sidebar-nav" aria-label="Lesson Navigation">
+          <a href="#lesson-top" class="nav-link is-active">课程概览</a>
+          <a href="#lesson-goals" class="nav-link">学习目标</a>
+          <a href="#lesson-points" class="nav-link">核心知识点</a>
+          <a href="#lesson-readings" class="nav-link">源码阅读</a>
+          <a href="#lesson-content" class="nav-link">正文内容</a>
+          <a href="#lesson-actions" class="nav-link">练习与下一步</a>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <section id="lesson-top" class="panel intro-panel">
+          <div>
+            <p class="eyebrow" id="lesson-kicker">Lesson Detail</p>
+            <h2 id="lesson-title">加载中</h2>
+            <p class="lead" id="lesson-description">正在准备课程简介。</p>
+          </div>
+          <div class="stats two-stats">
+            <div class="stat-card">
+              <span class="stat-value" id="lesson-number">01</span>
+              <span class="stat-label">章节编号</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value" id="lesson-unit">单元一</span>
+              <span class="stat-label">所属单元</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="lesson-goals" class="panel">
+          <div class="section-head">
+            <p class="eyebrow">Goals</p>
+            <h3>学习目标</h3>
+          </div>
+          <ul id="lesson-goals-list" class="bullet-list"></ul>
+        </section>
+
+        <section id="lesson-points" class="panel">
+          <div class="section-head">
+            <p class="eyebrow">Key Points</p>
+            <h3>核心知识点</h3>
+          </div>
+          <ul id="lesson-points-list" class="bullet-list"></ul>
+        </section>
+
+        <section id="lesson-readings" class="panel">
+          <div class="section-head">
+            <p class="eyebrow">Reading</p>
+            <h3>源码阅读入口</h3>
+          </div>
+          <div id="lesson-reading-list" class="source-list"></div>
+        </section>
+
+        <section id="lesson-content" class="panel">
+          <div class="section-head">
+            <p class="eyebrow">Content</p>
+            <h3>课程正文</h3>
+          </div>
+          <div id="lesson-article" class="lesson-article"></div>
+        </section>
+
+        <section id="lesson-actions" class="panel">
+          <div class="section-head">
+            <p class="eyebrow">Next Step</p>
+            <h3>练习与导航</h3>
+          </div>
+          <div id="lesson-action-list" class="practice-list"></div>
+          <div class="lesson-pager">
+            <a id="prev-lesson" class="button secondary" href="./project-rag-api.html">上一课</a>
+            <a id="next-lesson" class="button primary" href="./project-rag-api.html">下一课</a>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./course-data.js"></script>
+    <script src="./lesson.js"></script>
+  </body>
+</html>

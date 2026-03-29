@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Learning Lab</title>
+    <meta
+      name="description"
+      content="AI Learning Lab 首页。先选择一个教学项目，再进入对应课程列表与章节学习。"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="home-page">
+    <main class="shell shell-narrow">
+      <header class="page-hero">
+        <p class="eyebrow">Teaching Projects</p>
+        <h1>选择一个教学项目开始学习</h1>
+        <p class="lead">
+          首页只展示项目。进入项目后，再查看课程列表，最后逐节进入具体内容。
+        </p>
+      </header>
+
+      <section class="project-list" aria-label="Project List">
+        <a class="project-card" href="./project-rag-api.html">
+          <div class="project-card-top">
+            <span class="project-badge">Project 01</span>
+            <span class="project-arrow">进入</span>
+          </div>
+          <h2>rag_api</h2>
+          <p>
+            一个以 <code>file_id</code> 为中心组织文档向量的 RAG 检索服务。课程会围绕文档摄取、切块、Embedding、向量库、检索接口和工程化实现展开。
+          </p>
+          <ul class="project-meta">
+            <li>5 个学习单元</li>
+            <li>15 节课</li>
+            <li>适合工程化 RAG 学习</li>
+          </ul>
+        </a>
+      </section>
+    </main>
+  </body>
+</html>

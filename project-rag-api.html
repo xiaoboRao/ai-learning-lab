@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>rag_api | AI Learning Lab</title>
+    <meta
+      name="description"
+      content="rag_api 教学项目页。查看课程结构、15 节课列表与源码入口。"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="project-page">
+    <div class="shell shell-wide">
+      <aside class="sidebar">
+        <a class="sidebar-back" href="./index.html">← 返回项目首页</a>
+        <div class="sidebar-card">
+          <p class="eyebrow">Current Project</p>
+          <h1>rag_api</h1>
+          <p>
+            一个偏索引与检索层的教学项目。目标不是做聊天界面，而是学会 RAG 底座如何被构建出来。
+          </p>
+        </div>
+        <nav class="sidebar-card sidebar-nav" aria-label="Project Navigation">
+          <a href="#overview" class="nav-link is-active">项目概览</a>
+          <a href="#units" class="nav-link">学习单元</a>
+          <a href="#lessons" class="nav-link">课程列表</a>
+          <a href="#sources" class="nav-link">源码入口</a>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <section id="overview" class="panel intro-panel">
+          <div>
+            <p class="eyebrow">Project Overview</p>
+            <h2>先看课程结构，再逐节进入。</h2>
+            <p class="lead">
+              这个页面只负责展示项目说明、课程结构和章节入口。真正的学习发生在每一节课的详情页里。
+            </p>
+          </div>
+          <div class="stats">
+            <div class="stat-card">
+              <span class="stat-value">5</span>
+              <span class="stat-label">学习单元</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value">15</span>
+              <span class="stat-label">课程章节</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value">1</span>
+              <span class="stat-label">主仓库</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="units" class="panel">
+          <div class="section-head">
+            <p class="eyebrow">Units</p>
+            <h3>学习单元</h3>
+          </div>
+          <div id="units-grid" class="units-grid"></div>
+        </section>
+
+        <section id="lessons" class="panel">
+          <div class="section-head">
+            <p class="eyebrow">Lessons</p>
+            <h3>课程列表</h3>
+            <p>按顺序进入最合适。每节课都是独立页面，可以单独学习。</p>
+          </div>
+          <div id="lesson-list" class="lesson-list"></div>
+        </section>
+
+        <section id="sources" class="panel">
+          <div class="section-head">
+            <p class="eyebrow">Source Map</p>
+            <h3>源码入口</h3>
+          </div>
+          <div id="source-list" class="source-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./course-data.js"></script>
+    <script src="./project.js"></script>
+  </body>
+</html>
