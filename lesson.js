@@ -2,7 +2,6 @@ const params = new URLSearchParams(window.location.search);
 const lessonId = Number(params.get("id") || "1");
 const staticLessons = window.courseData.lessons;
 const catalogList = document.querySelector("#lesson-catalog-list");
-const RAG_API_REPO = "https://github.com/xiaoboRao/rag_api";
 
 async function loadGeneratedLessons() {
   try {
@@ -13,15 +12,6 @@ async function loadGeneratedLessons() {
   } catch {
     return [];
   }
-}
-
-function toPublicSourceHref(path) {
-  if (!path) return "./project-rag-api.html";
-  if (/^https?:\/\//.test(path)) return path;
-  if (!path.startsWith("../rag_api/")) return path;
-  const relativePath = path.replace("../rag_api/", "");
-  const target = /\.[a-z0-9]+$/i.test(relativePath) ? "blob" : "tree";
-  return `${RAG_API_REPO}/${target}/main/${relativePath}`;
 }
 
 function setText(selector, value) {
@@ -73,41 +63,6 @@ function renderList(selector, items) {
     li.textContent = item;
     container.appendChild(li);
   });
-}
-
-function renderSources(lesson) {
-  const readingList = document.querySelector("#lesson-reading-list");
-  readingList.innerHTML = "";
-
-  const readingPaths = lesson.generatedSourcePath
-    ? [...lesson.readings, `../rag_api/${lesson.generatedSourcePath}`]
-    : [...lesson.readings];
-
-  [...new Set(readingPaths)].forEach((path) => {
-    const article = document.createElement("article");
-    article.className = "source-card";
-    article.innerHTML = `
-      <div class="source-card-header">
-        <div>
-          <p class="section-kicker">Source</p>
-          <h3>${path.split("/").pop()}</h3>
-        </div>
-        <span class="badge badge-soft">源码</span>
-      </div>
-      <p>${path}</p>
-      <a class="text-link" href="${toPublicSourceHref(path)}" target="_blank" rel="noreferrer">打开源码</a>
-    `;
-    readingList.appendChild(article);
-  });
-
-  const sourceLink = document.querySelector("#view-source-link");
-  const firstSource = readingPaths[0];
-  if (firstSource) {
-    sourceLink.href = toPublicSourceHref(firstSource);
-    sourceLink.target = "_blank";
-    sourceLink.rel = "noreferrer";
-    sourceLink.textContent = "打开本课源码";
-  }
 }
 
 function renderCatalog(lessonsData, currentLessonId) {
@@ -173,7 +128,6 @@ loadGeneratedLessons().then((generatedLessons) => {
   renderList("#lesson-goals-list", lesson.goals);
   renderList("#lesson-points-list", lesson.points);
   renderCatalog(lessonsData, lesson.id);
-  renderSources(lesson);
   setupPoster(lesson);
 
   startReadingLink.href = `./lesson-reader.html?id=${lesson.id}`;

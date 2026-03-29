@@ -1,8 +1,6 @@
-const { units, lessons: staticLessons, sources } = window.courseData;
+const { units, lessons: staticLessons } = window.courseData;
 const unitsGrid = document.querySelector("#units-grid");
 const lessonList = document.querySelector("#lesson-list");
-const sourceList = document.querySelector("#source-list");
-const RAG_API_REPO = "https://github.com/xiaoboRao/rag_api";
 
 async function loadGeneratedLessons() {
   try {
@@ -13,15 +11,6 @@ async function loadGeneratedLessons() {
   } catch {
     return [];
   }
-}
-
-function toPublicSourceHref(path) {
-  if (!path) return "./project-rag-api.html";
-  if (/^https?:\/\//.test(path)) return path;
-  if (!path.startsWith("../rag_api/")) return path;
-  const relativePath = path.replace("../rag_api/", "");
-  const target = /\.[a-z0-9]+$/i.test(relativePath) ? "blob" : "tree";
-  return `${RAG_API_REPO}/${target}/main/${relativePath}`;
 }
 
 function mergeLessons(staticItems, generatedItems) {
@@ -107,30 +96,8 @@ function renderLessons(lessons) {
   });
 }
 
-function renderSources() {
-  sourceList.innerHTML = "";
-
-  sources.forEach((source) => {
-    const article = document.createElement("article");
-    article.className = "source-card";
-    article.innerHTML = `
-      <div class="source-card-header">
-        <div>
-          <p class="section-kicker">Source</p>
-          <h3>${source.title}</h3>
-        </div>
-        <span class="badge badge-soft">源码</span>
-      </div>
-      <p>${source.description}</p>
-      <a class="text-link" href="${toPublicSourceHref(source.href)}" target="_blank" rel="noreferrer">打开源码</a>
-    `;
-    sourceList.appendChild(article);
-  });
-}
-
 loadGeneratedLessons().then((generatedLessons) => {
   const lessons = mergeLessons(staticLessons, generatedLessons);
   renderUnits(lessons);
   renderLessons(lessons);
-  renderSources();
 });
