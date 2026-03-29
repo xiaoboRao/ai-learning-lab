@@ -58,6 +58,20 @@ function buildLessonHtml(lesson) {
   return container.innerHTML;
 }
 
+function normalizeGeneratedSections(sections) {
+  if (!Array.isArray(sections) || !sections.length) {
+    return [];
+  }
+
+  return sections
+    .filter((section) => section && section.title && section.contentHtml)
+    .map((section, index) => ({
+      id: `reader-section-${index + 1}`,
+      title: section.title,
+      html: section.contentHtml,
+    }));
+}
+
 function mergeLessons(staticItems, generatedItems) {
   const generatedMap = new Map(generatedItems.map((item) => [item.id, item]));
   const merged = staticItems.map((item) => {
@@ -68,6 +82,7 @@ function mergeLessons(staticItems, generatedItems) {
           title: override.title || item.title,
           description: override.description || item.description,
           generatedContentHtml: override.contentHtml,
+          generatedSections: override.sections || [],
           generatedSourcePath: override.sourcePath,
         }
       : item;
@@ -86,6 +101,7 @@ function mergeLessons(staticItems, generatedItems) {
       article: [],
       actions: [],
       generatedContentHtml: item.contentHtml,
+      generatedSections: item.sections || [],
       generatedSourcePath: item.sourcePath,
     });
   });
@@ -268,7 +284,9 @@ function setupNavigation(lesson, lessonsData) {
 loadGeneratedLessons().then((generatedLessons) => {
   const lessonsData = mergeLessons(staticLessons, generatedLessons);
   const lesson = lessonsData.find((item) => item.id === lessonId) || lessonsData[0];
-  const sections = extractSections(buildLessonHtml(lesson));
+  const sections = normalizeGeneratedSections(lesson.generatedSections).length
+    ? normalizeGeneratedSections(lesson.generatedSections)
+    : extractSections(buildLessonHtml(lesson));
   const initialSectionId = sections.some((item) => item.id === window.location.hash.slice(1))
     ? window.location.hash.slice(1)
     : sections[0].id;

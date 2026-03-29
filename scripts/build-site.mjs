@@ -202,6 +202,53 @@ function markdownToHtml(markdown) {
   return blocks.join("\n");
 }
 
+function markdownToSections(markdown) {
+  const lines = markdown.split(/\r?\n/);
+  const sections = [];
+  let currentTitle = "";
+  let currentLines = [];
+
+  const pushSection = () => {
+    if (!currentTitle) return;
+    sections.push({
+      title: currentTitle,
+      contentHtml: markdownToHtml(currentLines.join("\n")),
+    });
+  };
+
+  for (const line of lines) {
+    if (line.startsWith("# ")) {
+      continue;
+    }
+
+    if (line.startsWith("## ")) {
+      pushSection();
+      currentTitle = line.slice(3).trim();
+      currentLines = [];
+      continue;
+    }
+
+    currentLines.push(line);
+  }
+
+  pushSection();
+
+  if (!sections.length) {
+    return [
+      {
+        title: extractTitle(markdown, "课程正文"),
+        contentHtml: markdownToHtml(
+          lines
+            .filter((line) => !line.startsWith("# "))
+            .join("\n")
+        ),
+      },
+    ];
+  }
+
+  return sections;
+}
+
 function extractTitle(markdown, fallbackName) {
   const match = markdown.match(/^#\s+(.+)$/m);
   return match ? match[1].trim() : fallbackName;
@@ -235,6 +282,7 @@ async function buildGeneratedLessons() {
       title: extractTitle(markdown, entry.name),
       description: extractDescription(markdown),
       contentHtml: markdownToHtml(markdown),
+      sections: markdownToSections(markdown),
       sourcePath: `Tutorial/${entry.name}`,
     });
   }
