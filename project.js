@@ -46,30 +46,37 @@ function mergeLessons(staticItems, generatedItems) {
   return merged.sort((a, b) => a.id - b.id);
 }
 
-units.forEach((unit) => {
-  const article = document.createElement("article");
-  article.className = "unit-card";
-  article.innerHTML = `
-    <div class="unit-top">
-      <span class="unit-index">0${unit.id}</span>
-      <div>
-        <p class="eyebrow">Unit ${unit.id}</p>
-        <h4>${unit.title}</h4>
-      </div>
-    </div>
-    <p>${unit.summary}</p>
-    <div class="pill-row">
-      ${unit.lessons.map((lessonId) => {
-        const lesson = lessons.find((item) => item.id === lessonId);
-        return `<span class="pill">第 ${lesson.id} 课</span>`;
-      }).join("")}
-    </div>
-  `;
-  unitsGrid.appendChild(article);
-});
+function renderUnits(lessons) {
+  unitsGrid.innerHTML = "";
 
-loadGeneratedLessons().then((generatedLessons) => {
-  const lessons = mergeLessons(staticLessons, generatedLessons);
+  units.forEach((unit) => {
+    const article = document.createElement("article");
+    article.className = "unit-card";
+    article.innerHTML = `
+      <div class="unit-top">
+        <span class="unit-index">0${unit.id}</span>
+        <div>
+          <p class="eyebrow">Unit ${unit.id}</p>
+          <h4>${unit.title}</h4>
+        </div>
+      </div>
+      <p>${unit.summary}</p>
+      <div class="pill-row">
+        ${unit.lessons
+          .map((lessonId) => {
+            const lesson = lessons.find((item) => item.id === lessonId);
+            if (!lesson) return "";
+            return `<span class="pill">第 ${lesson.id} 课</span>`;
+          })
+          .join("")}
+      </div>
+    `;
+    unitsGrid.appendChild(article);
+  });
+}
+
+function renderLessons(lessons) {
+  lessonList.innerHTML = "";
 
   lessons.forEach((lesson) => {
     const article = document.createElement("article");
@@ -87,6 +94,12 @@ loadGeneratedLessons().then((generatedLessons) => {
     `;
     lessonList.appendChild(article);
   });
+}
+
+loadGeneratedLessons().then((generatedLessons) => {
+  const lessons = mergeLessons(staticLessons, generatedLessons);
+  renderUnits(lessons);
+  renderLessons(lessons);
 });
 
 sources.forEach((source) => {
