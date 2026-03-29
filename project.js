@@ -1,8 +1,50 @@
-const { units, lessons, sources } = window.courseData;
+const { units, lessons: staticLessons, sources } = window.courseData;
 
 const unitsGrid = document.querySelector("#units-grid");
 const lessonList = document.querySelector("#lesson-list");
 const sourceList = document.querySelector("#source-list");
+
+async function loadGeneratedLessons() {
+  try {
+    const response = await fetch("./generated/lessons.json", { cache: "no-store" });
+    if (!response.ok) return [];
+    const data = await response.json();
+    return Array.isArray(data.lessons) ? data.lessons : [];
+  } catch {
+    return [];
+  }
+}
+
+function mergeLessons(staticItems, generatedItems) {
+  const generatedMap = new Map(generatedItems.map((item) => [item.id, item]));
+  const merged = staticItems.map((item) => {
+    const override = generatedMap.get(item.id);
+    return override
+      ? {
+          ...item,
+          title: override.title || item.title,
+          description: override.description || item.description,
+        }
+      : item;
+  });
+
+  generatedItems.forEach((item) => {
+    if (merged.some((lesson) => lesson.id === item.id)) return;
+    merged.push({
+      id: item.id,
+      unit: "新增课程",
+      title: item.title,
+      description: item.description,
+      goals: [],
+      points: [],
+      readings: item.sourcePath ? [`../rag_api/${item.sourcePath}`] : [],
+      article: [],
+      actions: [],
+    });
+  });
+
+  return merged.sort((a, b) => a.id - b.id);
+}
 
 units.forEach((unit) => {
   const article = document.createElement("article");
@@ -26,21 +68,25 @@ units.forEach((unit) => {
   unitsGrid.appendChild(article);
 });
 
-lessons.forEach((lesson) => {
-  const article = document.createElement("article");
-  article.className = "lesson-row";
-  article.innerHTML = `
-    <div class="lesson-row-main">
-      <span class="lesson-index">${String(lesson.id).padStart(2, "0")}</span>
-      <div>
-        <p class="eyebrow">${lesson.unit}</p>
-        <h4>${lesson.title}</h4>
-        <p>${lesson.description}</p>
+loadGeneratedLessons().then((generatedLessons) => {
+  const lessons = mergeLessons(staticLessons, generatedLessons);
+
+  lessons.forEach((lesson) => {
+    const article = document.createElement("article");
+    article.className = "lesson-row";
+    article.innerHTML = `
+      <div class="lesson-row-main">
+        <span class="lesson-index">${String(lesson.id).padStart(2, "0")}</span>
+        <div>
+          <p class="eyebrow">${lesson.unit}</p>
+          <h4>${lesson.title}</h4>
+          <p>${lesson.description}</p>
+        </div>
       </div>
-    </div>
-    <a class="button secondary compact" href="./lesson.html?id=${lesson.id}">进入学习</a>
-  `;
-  lessonList.appendChild(article);
+      <a class="button secondary compact" href="./lesson.html?id=${lesson.id}">进入学习</a>
+    `;
+    lessonList.appendChild(article);
+  });
 });
 
 sources.forEach((source) => {
